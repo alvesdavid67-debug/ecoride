@@ -30,20 +30,35 @@ EcoRide est une plateforme permettant de mettre en relation des chauffeurs et de
 ## 📁 Structure du projet
 
 -index.php -> Page d'accueil 
+
 -connexion.php -> Connexion utilisateur 
+
 -inscription.php -> Création de compte 
+
 -covoiturage.php | Recherche de trajets 
+
 -detail.php -> Détail d'un trajet 
+
 -reservation.php -> Réservation + crédits 
+
 -historique.php -> Historique des réservations 
+
 -proposer_trajet.php -> Proposer un trajet (chauffeur) 
+
 -employe.php -> Espace employé 
+
 -admin.php -> Espace administrateur 
+
 -contact.php -> Page contact 
--mentions_legales.php -> Mentions légales 
+
+-mentions_legales.php -> Mentions légales
+
 -includes/db.php -> Connexion base de données 
+
 -includes/header.php -> Header commun 
+
 -includes/footer.php -> Footer commun 
+
 -ecoride.sql -> Structure de la base de données 
 
 ## Base de données
