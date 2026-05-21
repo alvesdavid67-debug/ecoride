@@ -85,7 +85,7 @@ Importer le fichier "ecoride.sql" dans phpMyAdmin.
 - **Graphiques admin** : Les données sont affichées mais la visualisation en graphiques est prévue et non implémentée
 - **Boutons Démarrer/Arriver** : Implémentés dans l'historique, les mails aux participants post-trajet sont prévus mais non implémentés
 
-## ℹInformations diverses
+## Informations diverses
 - Démarrage du projet : 6 mai 2026
 - Fin du projet : 21 mai 2026
 - Durée du projet : 81 heures
