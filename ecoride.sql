@@ -1,3 +1,4 @@
+USE `if0_41974956_ecoride`;
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
@@ -19,11 +20,7 @@ SET time_zone = "+00:00";
 
 --
 -- Base de données : `ecoride`
---
-CREATE DATABASE IF NOT EXISTS `ecoride` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `ecoride`;
 
--- --------------------------------------------------------
 
 --
 -- Structure de la table `avis`
@@ -32,7 +29,7 @@ USE `ecoride`;
 CREATE TABLE `avis` (
   `avis_id` int(11) NOT NULL,
   `commentaire` varchar(255) DEFAULT NULL,
-  `note` float DEFAULT NULL CHECK (`note` > 1 and `note` < 5),
+  `note` float DEFAULT NULL,
   `statut` varchar(50) DEFAULT 'en attente',
   `covoiturage_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

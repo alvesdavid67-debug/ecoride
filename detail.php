@@ -4,7 +4,10 @@ include 'includes/db.php';
 
 $id = $_GET['id'];
 
-$sql = "SELECT * FROM covoiturage WHERE covoiturage_id = ?";
+$sql = "SELECT covoiturage.*, voiture.modele, voiture.energie, voiture.couleur, voiture.tabac, voiture.animal 
+        FROM covoiturage 
+        LEFT JOIN voiture ON covoiturage.voiture_id = voiture.voiture_id
+        WHERE covoiturage.covoiturage_id = ?";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$id]);
 $trajet = $stmt->fetch();
@@ -36,7 +39,21 @@ if (!$trajet) {
             <p>🕓 Arrivée : <strong><?php echo $trajet['heure_arrivee']; ?></strong></p>
             <p>💺 Places restantes : <strong><?php echo $trajet['nombre_place']; ?></strong></p>
             <p>💰 Prix : <strong style="color: #FB9B27;"><?php echo $trajet['prix_personne']; ?>€ / personne</strong></p>
-
+            <?php if ($trajet['modele']) : ?>
+    <hr>
+    <h6 style="color: #248179;">🚗 Véhicule</h6>
+    <p><?php echo $trajet['modele']; ?> — <?php echo $trajet['couleur']; ?> — <?php echo $trajet['energie']; ?></p>
+    
+    <h6 style="color: #248179;">Préférences du conducteur</h6>
+    <span class="badge me-2" style="background-color: #FED8A9; color: #4E4F59;">
+        🚬 Fumeur : <?php echo $trajet['tabac'] ? 'Oui' : 'Non'; ?>
+    </span>
+    <span class="badge" style="background-color: #FED8A9; color: #4E4F59;">
+        🐾 Animaux : <?php echo $trajet['animal'] ? 'Oui' : 'Non'; ?>
+    </span>
+    
+<?php endif; ?>
+            
             <?php if (isset($_SESSION['user_id'])) : ?>
               <a href="reservation.php?id=<?php echo $trajet['covoiturage_id']; ?>" 
                  class="btn w-100 mt-3" 

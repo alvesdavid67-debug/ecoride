@@ -1,7 +1,7 @@
-<footer style="background-color: #4E4F59; class=py-3 mt-auto">
+<footer style="background-color: #4E4F59;" class="py-3 mt-auto">
     <div class="container d-flex justify-content-between">
         <span class="text-white">contact@ecoride.fr</span>
-        <span class="text-white">Mentions legales</span>
+        <a href="/mentions_legales.php" class="text-white">Mentions légales</a>
     </div>
 </footer>
 

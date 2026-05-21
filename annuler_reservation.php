@@ -34,6 +34,19 @@ if ($resa) {
     $sql4 = "UPDATE reservation SET statut = 'annulée' WHERE reservation_id = ?";
     $stmt4 = $pdo->prepare($sql4);
     $stmt4->execute([$id_resa]);
+
+    // Envoyer un mail de notification
+    $sql_user = "SELECT email FROM utilisateur WHERE utilisateur_id = ?";
+    $stmt_user = $pdo->prepare($sql_user);
+    $stmt_user->execute([$id_user]);
+    $user_info = $stmt_user->fetch();
+
+    $to = $user_info['email'];
+    $subject = "Annulation de votre réservation EcoRide";
+    $message = "Bonjour,\n\nVotre réservation pour le trajet " . $resa['lieu_depart'] . " → " . $resa['lieu_arrivee'] . " a été annulée.\n\nVos crédits ont été remboursés.\n\nL'équipe EcoRide";
+    $headers = "From: contact@ecoride.fr";
+
+mail($to, $subject, $message, $headers);
 }
 
 header('Location: historique.php');

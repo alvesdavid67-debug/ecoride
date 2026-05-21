@@ -4,7 +4,6 @@ include 'includes/db.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Vérifier que l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
     header('Location: connexion.php');
     exit;
@@ -12,7 +11,6 @@ if (!isset($_SESSION['user_id'])) {
 
 $id_user = $_SESSION['user_id'];
 
-// Récupérer l'utilisateur
 $sql = "SELECT * FROM utilisateur WHERE utilisateur_id = ?";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$id_user]);
@@ -31,17 +29,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre_place = $_POST['nombre_place'];
     $prix_personne = $_POST['prix_personne'];
     $voyage_eco = isset($_POST['voyage_eco']) ? 1 : 0;
+    $immatriculation = $_POST['immatriculation'];
+    $date_premiere_immatriculation = $_POST['date_premiere_immatriculation'];
+    $modele = $_POST['modele'];
+    $marque = $_POST['marque'];
+    $couleur = $_POST['couleur'];
+    $energie = $_POST['energie'];
+    $tabac = isset($_POST['tabac']) ? 1 : 0;
+    $animal = isset($_POST['animal']) ? 1 : 0;
 
     if ($user['credits'] < 2) {
         $erreur = "Crédits insuffisants pour proposer un trajet (2 crédits nécessaires).";
     } else {
-        // Insérer le trajet
-        $sql2 = "INSERT INTO covoiturage (lieu_depart, lieu_arrivee, date_depart, heure_depart, date_arrivee, heure_arrivee, nombre_place, prix_personne, voyage_eco, statut) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'actif')";
-        $stmt2 = $pdo->prepare($sql2);
-        $stmt2->execute([$lieu_depart, $lieu_arrivee, $date_depart, $heure_depart, $date_arrivee, $heure_arrivee, $nombre_place, $prix_personne, $voyage_eco]);
+        $sql_voiture = "INSERT INTO voiture (modele, immatriculation, energie, couleur, date_premiere_immatriculation, tabac, animal) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt_voiture = $pdo->prepare($sql_voiture);
+        $stmt_voiture->execute([$modele, $immatriculation, $energie, $couleur, $date_premiere_immatriculation, $tabac, $animal]);
+        $voiture_id = $pdo->lastInsertId();
 
-        // Prélever 2 crédits
+        $sql2 = "INSERT INTO covoiturage (lieu_depart, lieu_arrivee, date_depart, heure_depart, date_arrivee, heure_arrivee, nombre_place, prix_personne, voyage_eco, statut, voiture_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'actif', ?)";
+        $stmt2 = $pdo->prepare($sql2);
+        $stmt2->execute([$lieu_depart, $lieu_arrivee, $date_depart, $heure_depart, $date_arrivee, $heure_arrivee, $nombre_place, $prix_personne, $voyage_eco, $voiture_id]);
+
         $sql3 = "UPDATE utilisateur SET credits = credits - 2 WHERE utilisateur_id = ?";
         $stmt3 = $pdo->prepare($sql3);
         $stmt3->execute([$id_user]);
@@ -115,6 +123,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="number" name="prix_personne" class="form-control" min="1" required>
                   </div>
                 </div>
+                <hr>
+                <h5 style="color: #248179;" class="mb-3">Informations du véhicule</h5>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label>Plaque d'immatriculation</label>
+                    <input type="text" name="immatriculation" class="form-control" required>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label>Date de première immatriculation</label>
+                    <input type="date" name="date_premiere_immatriculation" class="form-control" required>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4 mb-3">
+                    <label>Modèle</label>
+                    <input type="text" name="modele" class="form-control" required>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label>Marque</label>
+                    <input type="text" name="marque" class="form-control" required>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label>Couleur</label>
+                    <input type="text" name="couleur" class="form-control" required>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label>Énergie</label>
+                    <select name="energie" class="form-control" required>
+                      <option value="Essence">Essence</option>
+                      <option value="Diesel">Diesel</option>
+                      <option value="Électrique">Électrique</option>
+                      <option value="Hybride">Hybride</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <div class="form-check">
+                      <input type="checkbox" name="tabac" class="form-check-input" id="tabac">
+                      <label class="form-check-label" for="tabac">🚬 Fumeur accepté</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="form-check">
+                      <input type="checkbox" name="animal" class="form-check-input" id="animal">
+                      <label class="form-check-label" for="animal">🐾 Animaux acceptés</label>
+                    </div>
+                  </div>
+                </div>
+                <hr>
                 <div class="mb-3">
                   <div class="form-check">
                     <input type="checkbox" name="voyage_eco" class="form-check-input" id="voyage_eco">
@@ -126,7 +186,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
               </form>
             <?php endif; ?>
-
           </div>
         </div>
       </div>
@@ -135,4 +194,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </main>
 
 <?php include 'includes/footer.php'; ?>
-

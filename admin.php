@@ -25,6 +25,12 @@ $stmt_reservations = $pdo->prepare($sql_reservations);
 $stmt_reservations->execute();
 $total_reservations = $stmt_reservations->fetch()['total'];
 
+// Total en crédits gagnés par la plateforme
+$sql_credits = "SELECT COUNT(*) * 2 as total_credits FROM covoiturage WHERE statut != 'annulé'";
+$stmt_credits = $pdo->prepare($sql_credits);
+$stmt_credits->execute();
+$total_credits = $stmt_credits->fetch()['total_credits'];
+
 // Liste des utilisateurs
 $sql_liste = "SELECT * FROM utilisateur ORDER BY utilisateur_id DESC";
 $stmt_liste = $pdo->prepare($sql_liste);
@@ -51,23 +57,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['suspendre'])) {
 
       <!-- STATISTIQUES -->
       <div class="row mb-5">
-        <div class="col-md-4 mb-3">
+        <div class="col-md-3 mb-3">
           <div class="card border-0 shadow-sm p-4 text-center">
             <h1 style="color: #248179;"><?php echo $total_trajets; ?></h1>
             <p style="color: #4E4F59;">Total des trajets</p>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-3 mb-3">
           <div class="card border-0 shadow-sm p-4 text-center">
             <h1 style="color: #248179;"><?php echo $total_users; ?></h1>
             <p style="color: #4E4F59;">Utilisateurs inscrits</p>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-3 mb-3">
           <div class="card border-0 shadow-sm p-4 text-center">
             <h1 style="color: #248179;"><?php echo $total_reservations; ?></h1>
             <p style="color: #4E4F59;">Réservations confirmées</p>
           </div>
+        </div>
+        <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm p-4 text-center">
+          <h1 style="color: #248179;"><?php echo $total_credits; ?></h1>
+           <p style="color: #4E4F59;">Total crédits</p>
+    </div>
         </div>
       </div>
 

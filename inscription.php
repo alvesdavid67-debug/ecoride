@@ -9,10 +9,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
     $password_confirm = $_POST['password_confirm'];
 
-    if ($password !== $password_confirm) {
-        $erreur = "Les mots de passe ne correspondent pas";
-    } else {
-        $hash = password_hash($password, PASSWORD_DEFAULT);
+  if ($password !== $password_confirm) {
+    $erreur = "Les mots de passe ne correspondent pas";
+} elseif (strlen($password) < 8 || !preg_match('/[A-Z]/', $password) || !preg_match('/[0-9]/', $password)) {
+    $erreur = "Le mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre.";
+} else {
+    $hash = password_hash($password, PASSWORD_DEFAULT);
         $sql = "INSERT INTO utilisateur (pseudo, email, password, credits) VALUES (?, ?, ?, 20)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$pseudo, $email, $hash]);

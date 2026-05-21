@@ -3,26 +3,28 @@
 <main>
 
   <!-- HERO -->
-  <section style="background-image: url('/ecoride/assets/images/hero.webp'); background-size: cover; background-position: center; min-height: 500px;">
+  <section style="background-image: url('assets/images/hero.webp'); background-size: cover; background-position: center; min-height: 500px;">
     <div class="container text-center">
       <h1 style="font-family: Poppins; color: #4E4F59;">Voyagez écolo, voyagez ensemble</h1>
       <p style="font-family: Inter; color: #4E4F59;">EcoRide est la première plateforme française de covoiturage écologique.</p>
 
       <!-- FORMULAIRE DE RECHERCHE -->
-      <div class="row justify-content-center mt-4">
-        <div class="col-md-3">
-          <input type="text" class="form-control" placeholder="Départ" id="depart">
-        </div>
-        <div class="col-md-3">
-          <input type="text" class="form-control" placeholder="Arrivée" id="arrivee">
-        </div>
-        <div class="col-md-2">
-          <input type="date" class="form-control" id="date">
-        </div>
-        <div class="col-md-2">
-          <button class="btn w-100" style="background-color: #FB9B27; color: white;">Rechercher</button>
-        </div>
-      </div>
+      <form method="GET" action="/covoiturage.php">
+  <div class="row justify-content-center mt-4">
+    <div class="col-md-3">
+      <input type="text" name="depart" class="form-control" placeholder="Départ">
+    </div>
+    <div class="col-md-3">
+      <input type="text" name="arrivee" class="form-control" placeholder="Arrivée">
+    </div>
+    <div class="col-md-2">
+      <input type="date" name="date" class="form-control">
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn w-100" style="background-color: #FB9B27; color: white;">Rechercher</button>
+    </div>
+  </div>
+</form>
 
     </div>
   </section>

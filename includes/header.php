@@ -17,44 +17,44 @@
     
 <nav class="navbar navbar-expand-lg" style="background-color: #248179;">
     <div class="container">
-        <a class="navbar-brand text-white fw-bold" href="/ecoride/index.php">EcoRide</a>
+        <a class="navbar-brand text-white fw-bold" href="/index.php">EcoRide</a>
         <button class="navbar-toggler" type="button"  data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item px -3">
-                    <a class="nav-link text-white" href="/ecoride/index.php">Accueil</a>
+                    <a class="nav-link text-white" href="/index.php">Accueil</a>
                 </li>    
                 <li class="nav-item px -3">
-                    <a class="nav-link text-white" href="/ecoride/covoiturage.php">Covoiturage</a>
+                    <a class="nav-link text-white" href="/covoiturage.php">Covoiturage</a>
                 </li>
                 <li class="nav-item px -3">
-                    <a class="nav-link text-white" href="/ecoride/connexion.php">Connexion</a>
+                    <a class="nav-link text-white" href="/connexion.php">Connexion</a>
                 </li>
                 <li class="nav-item px -3">
-                    <a class="nav-link text-white" href="/ecoride/contact.php">Contact</a>
+                    <a class="nav-link text-white" href="/contact.php">Contact</a>
                 </li>    
                 <?php if (isset($_SESSION['user_id'])) : ?>
         <li class="nav-item px-3">
-            <a class="nav-link text-white" href="/ecoride/historique.php">Mon historique</a>
+            <a class="nav-link text-white" href="/historique.php">Mon historique</a>
         </li>
         <li class="nav-item px-3">
-            <a class="nav-link text-white" href="/ecoride/proposer_trajet.php">Proposer un trajet</a>
+            <a class="nav-link text-white" href="/proposer_trajet.php">Proposer un trajet</a>
         </li>
         <li class="nav-item px-3">
             <span class="nav-link text-white">👤 <?php echo $_SESSION['pseudo']; ?></span>
         </li>
         <li class="nav-item px-3">
-            <a class="nav-link" href="/ecoride/deconnexion.php" style="color: #FB9B27;">Déconnexion</a>
+            <a class="nav-link" href="/deconnexion.php" style="color: #FB9B27;">Déconnexion</a>
         </li>
 
     <?php else : ?>
         <li class="nav-item px-3">
-            <a class="nav-link text-white" href="/ecoride/connexion.php">Connexion</a>
+            <a class="nav-link text-white" href="/connexion.php">Connexion</a>
         </li>
         <li class="nav-item px-3">
-            <a class="nav-link text-white" href="/ecoride/inscription.php">Inscription</a>
+            <a class="nav-link text-white" href="/inscription.php">Inscription</a>
         </li>
     <?php endif; ?>
 

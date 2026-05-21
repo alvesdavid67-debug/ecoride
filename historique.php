@@ -21,6 +21,28 @@ $sql = "SELECT reservation.*, covoiturage.lieu_depart, covoiturage.lieu_arrivee,
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$id_user]);
 $reservations = $stmt->fetchAll();
+
+// Récupérer les trajets proposés par l'utilisateur
+$sql_trajets = "SELECT * FROM covoiturage WHERE statut IN ('actif', 'en cours') ORDER BY date_depart DESC";
+$stmt_trajets = $pdo->prepare($sql_trajets);
+$stmt_trajets->execute();
+$mes_trajets = $stmt_trajets->fetchAll();
+
+// Traitement des boutons démarrer/arriver
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['demarrer'])) {
+        $sql_dem = "UPDATE covoiturage SET statut = 'en cours' WHERE covoiturage_id = ?";
+        $stmt_dem = $pdo->prepare($sql_dem);
+        $stmt_dem->execute([$_POST['trajet_id']]);
+    }
+    if (isset($_POST['arriver'])) {
+        $sql_arr = "UPDATE covoiturage SET statut = 'terminé' WHERE covoiturage_id = ?";
+        $stmt_arr = $pdo->prepare($sql_arr);
+        $stmt_arr->execute([$_POST['trajet_id']]);
+    }
+    header('Location: historique.php');
+    exit;
+}
 ?>
 
 <?php include 'includes/header.php'; ?>
@@ -59,6 +81,52 @@ $reservations = $stmt->fetchAll();
           </div>
         <?php endforeach; ?>
       <?php endif; ?>
+
+      <!-- TRAJETS PROPOSÉS -->
+<h4 style="color: #248179;" class="mt-5 mb-3">Mes trajets proposés</h4>
+
+<?php if (empty($mes_trajets)) : ?>
+    <p>Vous n'avez pas encore proposé de trajet.</p>
+<?php else : ?>
+    <?php foreach ($mes_trajets as $t) : ?>
+        <div class="card border-0 shadow-sm p-3 mb-3">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h5 style="color: #248179;"><?php echo $t['lieu_depart']; ?> → <?php echo $t['lieu_arrivee']; ?></h5>
+                    <p>📅 <?php echo $t['date_depart']; ?> à <?php echo $t['heure_depart']; ?></p>
+                    <p>💺 <?php echo $t['nombre_place']; ?> places — 💰 <?php echo $t['prix_personne']; ?>€</p>
+                    <span class="badge" style="background-color: 
+                        <?php echo $t['statut'] === 'actif' ? '#B7DEAD' : ($t['statut'] === 'en cours' ? '#FB9B27' : '#4E4F59'); ?>; 
+                        color: white;">
+                        <?php echo $t['statut']; ?>
+                    </span>
+                </div>
+                <div class="col-md-6 text-end">
+                    <?php if ($t['statut'] === 'actif') : ?>
+                        <form method="POST" action="historique.php" class="d-inline">
+                            <input type="hidden" name="trajet_id" value="<?php echo $t['covoiturage_id']; ?>">
+                            <button type="submit" name="demarrer" class="btn btn-sm" 
+                                    style="background-color: #248179; color: white;">
+                                ▶ Démarrer
+                            </button>
+                        </form>
+                    <?php elseif ($t['statut'] === 'en cours') : ?>
+                        <form method="POST" action="historique.php" class="d-inline">
+                            <input type="hidden" name="trajet_id" value="<?php echo $t['covoiturage_id']; ?>">
+                            <button type="submit" name="arriver" class="btn btn-sm"
+                                    style="background-color: #FB9B27; color: white;"
+                                    onclick="return confirm('Confirmer l\'arrivée à destination ?')">
+                                🏁 Arrivée à destination
+                            </button>
+                        </form>
+                    <?php else : ?>
+                        <span style="color: #4E4F59;">✅ Trajet terminé</span>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
 
     </div>
   </section>

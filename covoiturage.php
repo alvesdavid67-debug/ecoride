@@ -6,10 +6,10 @@ include 'includes/db.php';
 
 $trajets = [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $depart = $_POST['depart'];
-    $arrivee = $_POST['arrivee'];
-    $date = $_POST['date'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['depart'])) {
+    $depart = $_POST['depart'] ?? $_GET['depart'];
+    $arrivee = $_POST['arrivee'] ?? $_GET['arrivee'];
+    $date = $_POST['date'] ?? $_GET['date'];
 
     $sql = "SELECT * FROM covoiturage 
             WHERE lieu_depart LIKE ? 
